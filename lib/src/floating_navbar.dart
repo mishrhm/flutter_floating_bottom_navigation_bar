@@ -11,6 +11,7 @@ class FloatingNavbar extends StatefulWidget {
   final Color backgroundColor;
   final double fontSize;
   final double iconSize;
+  final double selectedIconSize;
   final double itemBorderRadius;
   final double borderRadius;
 
@@ -23,6 +24,7 @@ class FloatingNavbar extends StatefulWidget {
       this.selectedBackgroundColor = Colors.white,
       this.selectedItemColor = Colors.black,
       this.iconSize = 24.0,
+      this.selectedIconSize = 30.0,
       this.fontSize = 11.0,
       this.borderRadius = 8,
       this.itemBorderRadius = 8,
@@ -90,7 +92,7 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                                     Icon(
                                       f.icon,
                                       color: widget.currentIndex == items.indexOf(f) ? widget.selectedItemColor : widget.unselectedItemColor,
-                                      size: widget.iconSize,
+                                      size: widget.currentIndex == items.indexOf(f) ? widget.selectedIconSize : widget.iconSize,
                                     ),
                                     Text(
                                       '${f.title}',
