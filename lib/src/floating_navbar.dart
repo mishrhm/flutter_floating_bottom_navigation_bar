@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class FloatingNavbar extends StatefulWidget {
   final List<FloatingNavbarItem> items;
   final int currentIndex;
+  final List<BoxShadow> boxShadow;
   final void Function(int val) onTap;
   final Color selectedBackgroundColor;
   final Color selectedItemColor;
@@ -15,20 +16,20 @@ class FloatingNavbar extends StatefulWidget {
   final double itemBorderRadius;
   final double borderRadius;
 
-  const FloatingNavbar(
-      {Key key,
-      @required this.items,
-      @required this.currentIndex,
-      @required this.onTap,
-      this.backgroundColor = Colors.black,
-      this.selectedBackgroundColor = Colors.white,
-      this.selectedItemColor = Colors.black,
-      this.iconSize = 24.0,
-      this.selectedIconSize = 30.0,
-      this.fontSize = 11.0,
-      this.borderRadius = 8,
-      this.itemBorderRadius = 8,
-      this.unselectedItemColor = Colors.white})
+  const FloatingNavbar({Key key,
+    @required this.items,
+    @required this.currentIndex,
+    @required this.onTap,
+    this.backgroundColor = Colors.black,
+    this.selectedBackgroundColor = Colors.white,
+    this.boxShadow = const [BoxShadow(offset: Offset(0.0, 0.0), color: Color.fromRGBO(0, 0, 0, 0), blurRadius: 0.0)],
+    this.selectedItemColor = Colors.black,
+    this.iconSize = 24.0,
+    this.selectedIconSize = 30.0,
+    this.fontSize = 11.0,
+    this.borderRadius = 8,
+    this.itemBorderRadius = 8,
+    this.unselectedItemColor = Colors.white})
       : assert(items.length > 1),
         assert(items.length <= 5),
         assert(currentIndex <= items.length),
@@ -50,10 +51,11 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
             child: Container(
-              padding: EdgeInsets.only(bottom: 8, top: 8),
+              padding: EdgeInsets.only(bottom: 2, top: 2),
               decoration: BoxDecoration(
+                boxShadow: widget.boxShadow,
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 color: widget.backgroundColor,
               ),
@@ -72,8 +74,11 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                           AnimatedContainer(
                             duration: Duration(milliseconds: 300),
                             decoration: BoxDecoration(
-                                color: widget.currentIndex == items.indexOf(f) ? widget.selectedBackgroundColor : widget.backgroundColor,
-                                borderRadius: BorderRadius.circular(widget.itemBorderRadius)),
+                                color: widget.currentIndex == items.indexOf(f)
+                                    ? widget.selectedBackgroundColor
+                                    : widget.backgroundColor,
+                                borderRadius: BorderRadius.circular(
+                                    widget.itemBorderRadius)),
                             child: InkWell(
                               onTap: () {
                                 this.widget.onTap(items.indexOf(f));
@@ -82,7 +87,10 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                               child: Container(
                                 //max-width for each item
                                 //24 is the padding from left and right
-                                width: MediaQuery.of(context).size.width * (100 / (items.length * 100)) - 24,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * (100 / (items.length * 100)) - 24,
                                 padding: EdgeInsets.all(4),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
@@ -91,13 +99,21 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                                   children: <Widget>[
                                     Icon(
                                       f.icon,
-                                      color: widget.currentIndex == items.indexOf(f) ? widget.selectedItemColor : widget.unselectedItemColor,
-                                      size: widget.currentIndex == items.indexOf(f) ? widget.selectedIconSize : widget.iconSize,
+                                      color: widget.currentIndex ==
+                                          items.indexOf(f) ? widget
+                                          .selectedItemColor : widget
+                                          .unselectedItemColor,
+                                      size: widget.currentIndex ==
+                                          items.indexOf(f) ? widget
+                                          .selectedIconSize : widget.iconSize,
                                     ),
                                     Text(
                                       '${f.title}',
                                       style: TextStyle(
-                                          color: widget.currentIndex == items.indexOf(f) ? widget.selectedItemColor : widget.unselectedItemColor,
+                                          color: widget.currentIndex ==
+                                              items.indexOf(f) ? widget
+                                              .selectedItemColor : widget
+                                              .unselectedItemColor,
                                           fontSize: widget.fontSize),
                                     ),
                                   ],
